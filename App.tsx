@@ -1,118 +1,101 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ManHinhChao from './Wellcome/ManHinhChao';
+import DangNhap from './Wellcome/DangNhap';
+import DangKi from './Wellcome/DangKi';
+import Home from './Home/Home';
+import TheChat from './Home/TheChat';
+import GiacNgu from './Home/GiacNgu';
+import TinhThan from './Home/TinhThan';
+import ThongKe from './Home/ThongKe';
+import { Image, View } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const AuthStack = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen name="ManHinhChao" component={ManHinhChao} options={{ headerShown: false }} />
+      <Stack.Screen name="DangNhap" component={DangNhap} options={{ headerShown: false }} />
+      <Stack.Screen name="DangKi" component={DangKi} options={{ headerShown: false }} />
+    </Stack.Navigator>
   );
-}
+};
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+const MainStack = () => {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+    <Tab.Navigator
+      initialRouteName='Home'
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconSource;
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+          if (route.name === 'Home') {
+            iconSource = require('./img/trangchu.png');
+            return (
+              <View style={{ 
+                width: 70, 
+                height: 70, 
+                borderRadius: 35, 
+                backgroundColor: '#883997', 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                marginBottom: 20,
+              }}>
+                <Image source={iconSource} style={{ width: size, height: size }} />
+              </View>
+            );
+          } else if (route.name === 'TheChat') {
+            iconSource = require('./img/thechat.png');
+          } else if (route.name === 'GiacNgu') {
+            iconSource = require('./img/ngu.png');
+          } else if (route.name === 'TinhThan') {
+            iconSource = require('./img/thien.png');
+          } else if (route.name === 'ThongKe') {
+            iconSource = require('./img/thongke.png');
+          }
+
+          return <Image source={iconSource} style={{ width: size, height: size }} />;
+        },
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 70,
+          margin: 10,
+          padding: 10,
+          position: 'absolute',
+          borderRadius: 15,
+          backgroundColor : '#4a148c', // Màu tím nhạt hơn
+        },
+        tabBarActiveTintColor: '#4a148c', // Màu khi chọn
+        tabBarInactiveTintColor: '#000', // Màu khi không chọn
+        tabBarItemStyle: {
+          transition: 'transform 0.2s', // Hiệu ứng chuyển động
+        },
+      })}
+    >
+      <Tab.Screen name="TheChat" component={TheChat} options={{ headerShown: false }} />
+      <Tab.Screen name="GiacNgu" component={GiacNgu} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+      <Tab.Screen name="TinhThan" component={TinhThan} options={{ headerShown: false }} />
+      <Tab.Screen name="ThongKe" component={ThongKe} options={{ headerShown: false }} />
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="ManHinhChao">
+        <Stack.Screen name="ManHinhChao" component={ManHinhChao} options={{ headerShown: false }} />
+        <Stack.Screen name="DangNhap" component={DangNhap} options={{ headerShown: false }} />
+        <Stack.Screen name="DangKi" component={DangKi} options={{ headerShown: false }} />
+        <Stack.Screen name="MainStack" component={MainStack} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default App;
